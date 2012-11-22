@@ -4,7 +4,7 @@ steal(
 ).then(
 	function()
 	{
-        Sigma.fixtures=Sigma.fixtures||{}
+		Sigma.fixtures=Sigma.fixtures||{}
 		can.Construct(
 			'Sigma.fixtures.hal_builder'
 		,	{}
@@ -25,7 +25,7 @@ steal(
 							aLink
 						,	function(item,key)
 							{
-								if (Object.prototype.toString.apply(item) === '[object Array]')
+								if (can.isArray(item))
 									can.each(
 										can.map(
 											item

@@ -6,7 +6,7 @@ steal.config({
 		}
 	},
 	paths: {
-		"jquery": "can/util/jquery/jquery.1.8.0.js"
+		"jquery": "can/util/jquery/jquery.1.8.2.js"
 	,	"sigma/media/": "sigma/stream/"
 	,	"sigma/lib/hal/": "js-hal/"
 	,	'sigma/lib/store2/':'https://raw.github.com/gist/3982154/'

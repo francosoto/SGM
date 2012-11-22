@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Stream Mustache Demo</title>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div id="stream" class="span9"></div>
+    	<script type='text/javascript' src='../../steal/steal.js'></script>
+</body>
+</html>
+
+<script type="text/javascript">
+
+	steal(
+		'sigma/lib'
+	,	'sigma/lib/style.js'
+	,	'sigma/lib/hypermedia.js'
+	,	'canui/list'
+	).then(
+		'sigma/media/media.css'
+	,	'sigma/media/stream_fixture.js'
+	,	'sigma/media/stream_adapter.js'
+	,	'sigma/media/stream_mustache.js'
+	,	'sigma/media/stream_mustache.css'
+	).then(
+		'sigma/hal/hal_builder.js'
+	,	'can/view/mustache'
+	).then(
+
+		function()
+		{
+
+			Sigma.HypermediaContainer(
+				'Sigma.Hypermedia.Stream.Container'
+			,	{
+					defaults:
+					{
+						media_types:
+						{
+							'posts':
+							{
+								Handler: Sigma.Hypermedia.Stream
+							,	options:{
+									target: 'posts'
+								}
+							}
+						}
+					}
+				}
+			,	{
+				}
+			)
+
+			var stream_container = new Sigma.Hypermedia.Stream.Container(
+				$('#stream')
+			,	{
+					id:'Stream'
+				,	target: 'Stream'
+				,	slot: Sigma.Model.HAL.Resource.Stream.getRoot()
+						.pipe(
+							function(raw)
+							{//solo para el caso de root hay que explicitar el rel (buscar algo mas consistente/elegante)
+								raw.rel='posts'
+							return	raw
+							}
+						)
+				}
+			)
+		}
+
+	)
+
+</script>

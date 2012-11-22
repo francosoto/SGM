@@ -12,28 +12,27 @@ steal(	'sigma/model'
 							return	Sigma.Model.HAL[can.capitalize(can.camelCase(rel))]
 							}
 					,	lookup:
-							function(what,relation,name)
+							function(what,relation,index_or_name)
 							{
-							var	found=false
-								if((name!=undefined)&&what&&what[relation])
+							var	found=what&&what[relation]
+								if(found&&found.length)
 								{
-									found=	what[relation][name]
-									||	can.grep(
+									found=	can.isNumeric(index_or_name)
+										?what[relation][index_or_name]
+										:can.grep(
 											what[relation]
 										,	function(item)
 											{
-											return	item.name==name
+											return	item.name==index_or_name
 											}
 										)[0]
 									if(!found)
 										throw	'algo esta mal con el resource'
 								}
-							return	((name!=undefined)&&what)?found:what[relation]
+							return found
 							}
 					}
-				,	{
-
-					}
+				,	{}
 				)
 		can.Observe(
 			'Sigma.Model.HAL.LinksItem'
@@ -233,7 +232,7 @@ steal(	'sigma/model'
 					}
 			,	Fetch: function(url, rel)
 				{
-					
+
 					var self=this
 					return	can.ajax(
 						{

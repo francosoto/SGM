@@ -1,4 +1,4 @@
-	<div <%= (el) -> el.model(this) %> class="medias">
+	<div <%= (el) -> el.instance(this) %> class="medias">
 		<div style="border-radius:20px;" class="media well">
 			<div class="media-object pull-left" style="text-align:center;padding:10px;border-radius:10px;line-height:1;background-color:#9D261D;font-size:150px;text-shadow:2px 2px 3px #222;color:white;" class="pull-left media-object" href="#" >
 				<i class="icon-<%= links.self.icon||attr('icon')||'bolt' %>"></i>
@@ -19,8 +19,8 @@
 										<ul class="medias">
 										<%can.each( link
 										,	function(lnk,key){var lnk=link[key]; %>
-											<li <%= (el) -> el.model(lnk)  %> class="media" data-relation="<%= link.rel %>" data-name="<%= lnk.name||key %>" >
-												<a  class="btn btn-primary pull-right" href="<%= lnk.url?lnk.url():lnk.href %>" <%= (el) -> el.model(lnk)  %> data-relation="<%= link.rel %>" data-name="<%= lnk.name||key %>">
+											<li <%= (el) -> el.instance(lnk)  %> class="media" data-relation="<%= link.rel %>" data-name="<%= lnk.name||key %>" >
+												<a  class="btn btn-primary pull-right" href="<%= lnk.url?lnk.url():lnk.href %>" <%= (el) -> el.instance(lnk)  %> data-relation="<%= link.rel %>" data-name="<%= lnk.name||key %>">
 													<h2 class="media-object"><i class="icon-<%= lnk.icon||'bolt' %>"></i></h2>
 												</a>
 												<div class="media-body">
@@ -35,7 +35,7 @@
 								</div>
 							<% }else{ %>
 								<div class="media-object pull-right" href="#" >
-									<a class="btn btn-primary" href="<%= link.url?link.url():link.href %>" <%= (el) -> el.model(lnk)  %> data-relation="<%= link.rel %>">
+									<a class="btn btn-primary" href="<%= link.url?link.url():link.href %>" <%= (el) -> el.instance(lnk)  %> data-relation="<%= link.rel %>">
 										<h2><i class="icon-<%= link.icon||'bolt' %>"></i></h2>
 									</a>
 								</div>

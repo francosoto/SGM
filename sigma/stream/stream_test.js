@@ -3,6 +3,7 @@ steal(
 ,	'sigma/lib/hypermedia.js'
 ).then(
 	'sigma/media/stream_fixture.js'
+,	'sigma/media/stream_adapter.js'
 ,	'sigma/hal/hal_builder.js'
 ,	'sigma/media'
 ,	'sigma/stream/stream_adapter.js'
@@ -52,36 +53,20 @@ steal(
 							)
 					}
 				)
-				
+
 				equal(stream_container.options.id,"Stream","ID Generated")
 
 
 				stop()
 				stream_container.options.slot
 					.then(
-						function(data) 
+						function(data)
 						{
 							start()
 							equal(data.constructor.fullName,"Sigma.Model.HAL.Resource.Stream","Resource Generated")
-							equal(stream.find('div.media-body h4').length,3,"Comments Length")
-							equal(data.embedded.attr('comments').constructor.fullName,"Sigma.Model.HAL.Resource.List","embedded.List type ok")
-							equals(data.embedded.attr('comments.0').constructor.fullName,"Sigma.Model.HAL.Comments", "embedded type ok");
-							can.each(
-								["TED","NERD","Friky"]
-							, 	function(title) 
-								{
-									ok(
-										can.grep(
-											stream.find('div.media-body h4')
-										,	function(item)
-											{	
-												return can.$(item).text() == title
-											}
-										).length > 0
-									,	"Comment "+title+" Generated"
-									)
-								}
-							)
+							equal(stream.find('div.media-body h4').length,9,"Stream Generated")
+							equals(data.embedded.attr('posts.0').constructor.fullName,"Sigma.Model.HAL.Posts", "embedded type ok");
+							equals(data.embedded.attr('posts.0').embedded.attr('comments.0').constructor.fullName,"Sigma.Model.HAL.Comments", "embedded type ok");
 						}
 					)
 
