@@ -289,8 +289,6 @@ steal(	'sigma/model'
 						).pipe(
 							function(raw)
 							{
-								//console.log(raw)
-								//aw.rel='root'
 								return	self.constructor.model(raw)
 							}
 						)
