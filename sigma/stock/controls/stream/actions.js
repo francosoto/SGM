@@ -1,12 +1,13 @@
 Sigma.HypermediaControl(
 	'Sigma.Hypermedia.Action'
 ,	{
-		defaults: 
+		defaults:
 		{
 			title:'3'
-		,	view:'//sigma/stream/views/actions.ejs'
+		,	view:'//sigma/stock/views/stream/actions.ejs'
+		//,	view:'views/actions.ejs'
 		,	css:
-				{	
+				{
 					'font-size':'20px'
 				,	'padding':'5px'
 				,	'border-radius':'5px'
@@ -20,7 +21,7 @@ Sigma.HypermediaControl(
 	}
 ,	{
 		init: function(element,options)
-		{			
+		{
 			var self = this
 			var AC = function(el,actions)
 			{
@@ -30,11 +31,11 @@ Sigma.HypermediaControl(
 						{
 							loading : function() { return 'Cargando'; }
 						,	empty   : function() { return 'Nada!' }
-						,	view    : function(action) //can.view('//sigma/stream/views/action.ejs')
-							{	
-								var li = 
+						,	view    : function(action)
+							{
+								var li =
 									$('<li>')
-										.append(can.view('//sigma/stream/views/action.ejs',action))
+										.append(can.view('//sigma/stock/views/stream/actions.ejs',action))
 										.css(self.options.css_list)
 								return li
 							}

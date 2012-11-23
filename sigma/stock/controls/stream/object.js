@@ -1,11 +1,11 @@
 Sigma.HypermediaControl(
 	'Sigma.Hypermedia.Object'
 ,	{
-		defaults: 
+		defaults:
 		{
 			align:'left'
 		,	title:'4'
-		,	view:'//sigma/stream/views/object.ejs'
+		,	view:'//sigma/stock/views/stream/object.ejs'
 		,	css:
 				{	'text-align':'center'
 				,	'padding':'10px'

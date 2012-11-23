@@ -1,14 +1,9 @@
 steal(
-	'sigma/lib'
-,	'sigma/lib/hypermedia.js'
-).then(
-	'sigma/details_view/details_view_fixture.js'
-,	'sigma/details_view/details.js'
-,	'sigma/details_view/drilldown.js'
-,	'sigma/details_view/comments.js'
+	'sigma/stock/controls/details'
+,	'sigma/stock/controls/details/fixtures.js'
 ).then(
 	function()
-	{	
+	{
 		test(
 			"Vista Detalle - Details"
 		,	function()
@@ -84,7 +79,7 @@ steal(
 				stop()
 				details_container.options.slot
 				.then(
-					function(data) 
+					function(data)
 					{
 						start()
 						ok(details.find('div.hc_generic:contains("Hola")'),"Hola Generado")

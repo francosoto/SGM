@@ -1,5 +1,6 @@
 steal(
-	'sigma/hal/hal_builder.js'
+	'can/util/fixture'
+,	'sigma/hal/hal_builder.js'
 ,	function()
 	{
 		can.fixture(

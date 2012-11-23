@@ -248,10 +248,16 @@ steal(	'sigma/model'
 				}
 			,	getRoot: function(url,rel)
 				{
-					rel = (rel==undefined)?'self':rel
-					var hal = {_links:{}}
-					hal._links[rel] = {href: url}
-					return this.model(hal).Fetch()
+					rel = (rel==undefined)?'root':rel
+					return this.model({_links:{self:{href:url}}})
+							.Fetch()
+							.pipe(
+								function(raw)
+								{
+									raw.rel=rel
+								return	raw
+								}
+							)
 				}
 			}
 		,	{

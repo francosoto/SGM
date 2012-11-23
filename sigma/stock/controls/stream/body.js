@@ -1,10 +1,10 @@
 Sigma.HypermediaControl(
 	'Sigma.Hypermedia.Body'
 ,	{
-		defaults: 
+		defaults:
 		{
 			title:'3'
-		,	view:'//sigma/stream/views/body.ejs'
+		,	view:'//sigma/stock/views/stream/body.ejs'
 		}
 	}
 ,	{
@@ -22,7 +22,7 @@ Sigma.HypermediaControl(
 								this.options.view
 							,	this.options.data
 							,	{
-									SubitemsControl : SC	
+									SubitemsControl : SC
 								}
 						)
 					)

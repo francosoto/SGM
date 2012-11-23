@@ -39,7 +39,11 @@ steal(	'sigma/lib'
 				}
 			}
 		,	{
-				_render_content:
+				init:	function(el,options)
+					{
+						this._super.apply(this,arguments)
+					}
+			,	_render_content:
 					function(data)
 					{
 						if(data instanceof can.Observe.List)

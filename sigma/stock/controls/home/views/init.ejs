@@ -1,0 +1,12 @@
+<h4>
+	<ul class="nav">
+		<% list(links.attr('applications'), function(application){ %>
+			<li tabindex=0>
+				<a href="#" data-relation="<%= application.rel %>" data-name="<%= application.name %>">
+					<i class="icon-<%= application.attr('icon') %>"></i>
+					<%= application.attr('title') %>
+				</a>
+			</li>
+		<%}) %>
+	</ul>
+</h4>
