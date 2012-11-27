@@ -1,5 +1,6 @@
 steal(
-	'sigma/hal/collections.js'
+	  'sigma/hal/collections.js'
+//,   'sigma/model/collections.js'
 ).then(
 	function()
 	{
@@ -79,12 +80,13 @@ steal(
 						function(collection)
 						{
 							collection.items=collection.items.slice(1,6)
-						return	collection
+							return	collection
 						}
 					)
 				).then(
 					function(collection)
 					{
+						Sigma.Model.HAL.Collection.Fetch('/provincias?items-per-page=2').then(function(obj){console.log(obj)})
 					var	the_first
 					=	Sigma.Model.HAL.Resource("Sigma.Model.HAL.Collection")
 						.getRoot('/provincias?items-per-page=2');

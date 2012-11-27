@@ -250,14 +250,14 @@ steal(	'sigma/model'
 				{
 					rel = (rel==undefined)?'root':rel
 					return this.model({_links:{self:{href:url}}})
-							.Fetch()
-							.pipe(
-								function(raw)
-								{
-									raw.rel=rel
+						.Fetch()
+						.pipe(
+							function(raw)
+							{
+								raw.rel=rel
 								return	raw
-								}
-							)
+							}
+						)
 				}
 			}
 		,	{
