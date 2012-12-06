@@ -100,7 +100,7 @@ steal(
 					,	{
 							getRoot: function(id)
 								{
-								return	Test.HALSample.model({_links:{self:{href:'/hal_samples/'+id}}}).Fetch()
+								return	this.Fetch('/hal_samples/'+id)
 								}
 						}
 					,	{ }
@@ -118,7 +118,6 @@ steal(
 				.then(
 					function(pr)
 					{
-						console.log(pr)
 						ok(pr.links, "links OK");
 						equals(pr.constructor.fullName, "Test.HALSample", "Resource type ok");
 						//equals(pr.links.constructor.fullName, "Sigma.Model.HAL.Links", "links type ok");
@@ -139,18 +138,8 @@ steal(
 		,	function()
 			{
 				stop();
-				Sigma.Model.HAL.Resource
-				(
-					"Sigma.Model.HAL.Single"
-				,	{ }
-				,	{ }
-				)
-				Sigma.Model.HAL.Resource
-				(
-					"Sigma.Model.HAL.Collection"
-				,	{ }
-				,	{ }
-				)
+				Sigma.Model.HAL.Resource("Sigma.Model.HAL.Single")
+				Sigma.Model.HAL.Resource("Sigma.Model.HAL.Collection")
 				can.Model.List( 'Sigma.Model.HAL.Collection.List');
 				var hal_sample = Test.HALSample.getRoot(1)
 				hal_sample
@@ -170,19 +159,8 @@ steal(
 		,	function()
 			{
 				stop();
-				Sigma.Model.HAL.Resource
-				(
-					"Sigma.Model.HAL.Single"
-				,	{
-					}
-				,	{ }
-				)
-				Sigma.Model.HAL.Resource
-				(
-					"Sigma.Model.HAL.Collection"
-				,	{ }
-				,	{ }
-				)
+				Sigma.Model.HAL.Resource("Sigma.Model.HAL.Single")
+				Sigma.Model.HAL.Resource("Sigma.Model.HAL.Collection")
 				var hal_sample = Test.HALSample.getRoot(1)
 				//Test.HALSample.bind('root',function(what){console.log({created:what})})
 				hal_sample

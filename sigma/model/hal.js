@@ -64,16 +64,6 @@ steal(	'sigma/model'
 					var	self=this
 					return	this.parent
 						.fetch(this.rel,this.name)
-						/*
-						.pipe(
-							function(raw)
-							{
-							return	raw instanceof can.Observe.List
-									?raw[self.index]
-									:raw
-							}
-						)
-						*/
 					}
 			,	post:
 					function(data)
@@ -117,9 +107,9 @@ steal(	'sigma/model'
 					}
 			}
 		);
-		Sigma.Model.HAL.Links=
-		can.Observe(
-			{
+		can.Model(
+			"Sigma.Model.HAL.Links"
+		,	{
 				setup:
 					function(data,resource)
 					{
@@ -133,22 +123,21 @@ steal(	'sigma/model'
 								self
 								.attr(	key
 								,	can.isArray(item)
-									?new Sigma.Model.HAL.LinksItem
-										.List(
-											item.map(
-												function(link_item,link_index)
-												{
-												var	result= new Sigma.Model.HAL
-														.LinksItem(link_item)
-													//not observed
-													result.parent=self
-													result.rel=key
-													result.name=result.name||link_index
-												return	result
-												}
+										?new Sigma.Model.HAL.LinksItem
+											.List(
+												item.map(
+													function(link_item,link_index)
+													{
+													var	result= new Sigma.Model.HAL.LinksItem(link_item)
+														//not observed
+														result.parent=self
+														result.rel=key
+														result.name=result.name||link_index
+													return	result
+													}
+												)
 											)
-										)
-									:new Sigma.Model.HAL.LinksItem(item)
+										:new Sigma.Model.HAL.LinksItem(item)
 								)
 								//not observed
 								self[key].parent=self
@@ -176,6 +165,7 @@ steal(	'sigma/model'
 					}
 			}
 		);
+
 		can.Model(
 			'Sigma.Model.HAL.Resource'
 		,	{
@@ -196,10 +186,8 @@ steal(	'sigma/model'
 								delete data['_'+prop]
 							}
 						)
-					var	the_model=	this._super(data)
-						the_model.links
-						=new	Sigma.Model.HAL
-							.Links(temp_data._links,the_model)
+					var	the_model = this._super(data)
+						the_model.links = new Sigma.Model.HAL.Links(temp_data._links, the_model)
 						the_model.embedded
 						=	(can.isArray(temp_data._embedded))
 								?(

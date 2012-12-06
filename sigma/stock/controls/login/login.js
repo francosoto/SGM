@@ -10,7 +10,7 @@ steal(
 					{
 						parent:false
 					,	target:false
-					,	view: '//stock/views/login/init.ejs'
+					,	view: '//sigma/stock/views/login/init.ejs'
 					}
 			}
 		,	{
