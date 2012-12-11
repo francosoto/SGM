@@ -9,12 +9,12 @@ steal(	'sigma/model'
 						model_by_rel:
 							function(rel)
 							{
-							return	Sigma.Model.HAL[can.capitalize(can.camelCase(rel))]
+							return	this[can.capitalize(can.camelCase(rel))]
 							}
 					,	lookup:
 							function(what,relation,index_or_name)
 							{
-							var	found=what&&what[relation]
+							var	found=what[relation]
 								if(found&&found.length)
 								{
 									found=	can.isNumeric(index_or_name)
@@ -31,6 +31,18 @@ steal(	'sigma/model'
 								}
 							return found
 							}
+					,	set_attributes:
+							function(item, attributes)
+							{
+								can.each(
+									attributes,
+									function(val, index)
+									{
+										item[index] = val
+									}
+								)
+								return item
+							}							
 					}
 				,	{}
 				)
@@ -53,22 +65,11 @@ steal(	'sigma/model'
 					function()
 					{
 					return	this.parent.get(this.rel,this.name)
-					var	result=this.parent.get(this.rel)
-					return	result instanceof can.Observe.List
-							?result[this.index]
-							:result
 					}
 			,	fetch:
 					function()
 					{
-					var	self=this
-					return	this.parent
-						.fetch(this.rel,this.name)
-					}
-			,	post:
-					function(data)
-					{
-					return	this.parent.post(this.rel,data)
+					return	this.parent.fetch(this.rel,this.name)
 					}
 			}
 		);
@@ -83,9 +84,10 @@ steal(	'sigma/model'
 							this
 						,	function(item,index)
 							{
-								item.index=index
-								item.name=item.name||index
-							return	item
+							return Sigma.Model.HAL.set_attributes(
+									item
+								,	{index: index, name: item.name||index}
+								)
 							}
 						)
 					}
@@ -98,12 +100,6 @@ steal(	'sigma/model'
 					function(name)
 					{
 					return	this.parent.fetch(this.rel,name)
-					}
-			,	post://implement
-					function(index,data)
-					{
-						throw 'no implementado'
-					return	this.parent.post(this[index||0].rel,data)
 					}
 			}
 		);
@@ -120,8 +116,7 @@ steal(	'sigma/model'
 							data
 						,	function(item,key)
 							{
-								self
-								.attr(	key
+								self.attr(key
 								,	can.isArray(item)
 										?new Sigma.Model.HAL.LinksItem
 											.List(
@@ -129,17 +124,19 @@ steal(	'sigma/model'
 													function(link_item,link_index)
 													{
 													var	result= new Sigma.Model.HAL.LinksItem(link_item)
-														//not observed
-														result.parent=self
-														result.rel=key
-														result.name=result.name||link_index
-													return	result
+													return Sigma.Model.HAL.set_attributes(
+															result
+														,	{
+																parent: self
+															,	rel: key
+															,	name: result.name||link_index
+															}
+														)
 													}
 												)
 											)
 										:new Sigma.Model.HAL.LinksItem(item)
-								)
-								//not observed
+								)//not observed
 								self[key].parent=self
 								self[key].rel=key
 							}
@@ -148,20 +145,18 @@ steal(	'sigma/model'
 			,	get:
 					function(relation,name)
 					{
-					var	link=Sigma.Model.HAL.lookup(this.resource.links,relation,name)
-					,	embedded=Sigma.Model.HAL.lookup(this.resource.embedded,relation,name)
-					,	model=	(Sigma.Model.HAL.model_by_rel(relation)||Sigma.Model.HAL.Resource)
-					return	embedded || (link && model.store[link.url()])
+					var	smh=Sigma.Model.HAL
+					return	smh.lookup(this.resource.embedded,relation,name) 
+					|| (
+						smh.lookup(this.resource.links,relation,name) 
+					&& 	(smh.model_by_rel(relation)||smh.Resource)
+						.store[smh.lookup(this.resource.links,relation,name).url()]
+					)
 					}
 			,	fetch:
 					function(relation,name)
 					{
 					return	this.resource.Linked(relation,name)
-					}
-			,	post:
-					function(relation,data)
-					{
-					return	this.resource.Post(relation,data)
 					}
 			}
 		);
@@ -177,28 +172,16 @@ steal(	'sigma/model'
 							||	data._links.self.href
 							).split('/')
 							.pop()
-					var	temp_data={}
-						can.each(
-							['links','embedded']
-						,	function(prop)
-							{
-								temp_data['_'+prop] = data['_'+prop]
-								delete data['_'+prop]
-							}
-						)
 					var	the_model = this._super(data)
-						the_model.links = new Sigma.Model.HAL.Links(temp_data._links, the_model)
+						the_model.links = new Sigma.Model.HAL.Links(data._links, the_model)
 						the_model.embedded
-						=	(can.isArray(temp_data._embedded))
-								?(
-									Sigma.Model.HAL.model_by_rel(relation)
-								||	Sigma.Model.HAL.Resource
-								).models(temp_data._embedded)
+						=	(can.isArray(data._embedded))
+								?(Sigma.Model.HAL.Resource).models(data._embedded)
 								:(
 									function(obs)
 									{
 										can.each(
-											temp_data._embedded
+											data._embedded
 										,	function(propv,relation)
 											{
 												obs.attr(
@@ -220,7 +203,6 @@ steal(	'sigma/model'
 					}
 			,	Fetch: function(url, rel)
 				{
-
 					var self=this
 					return	can.ajax(
 						{
@@ -236,25 +218,14 @@ steal(	'sigma/model'
 				}
 			,	getRoot: function(url,rel)
 				{
-					rel = (rel==undefined)?'root':rel
-					return this.model({_links:{self:{href:url}}})
-							.Fetch()
-							.pipe(
-								function(raw)
-								{
-									raw.rel=rel
-								return	raw
-								}
-							)
+					return this.Fetch(url,rel)
 				}
 			}
 		,	{
 				getHref:
 					function()
 					{
-					return	uritemplate(this.links.attr('self.href'))
-							.expand(this.attr())
-							//.replace(/\//g,'_')
+					return	uritemplate(this.links.attr('self.href')).expand(this.attr())
 					}
 			,	Linked:
 					function(relation,name)
@@ -265,8 +236,7 @@ steal(	'sigma/model'
 					return	(cached)
 							?can.Deferred().resolve(cached)
 							:link
-								?model.model({_links:{self:{href:link.url()}}}).Fetch()
-								//?model.Fetch("institutions", "lalala")
+								?model.Fetch(link.url())
 								:can.Deferred.reject(
 										'invalid relation: "' + relation + '"'
 								)
@@ -283,18 +253,6 @@ steal(	'sigma/model'
 							function(raw)
 							{
 								return	self.constructor.model(raw)
-							}
-						)
-					}
-			,	Post:
-					function(data)
-					{
-					var	self=this
-					return	can.ajax(
-							{
-								url:this.links.self.url()
-							,	method:'post'
-							,	data:data
 							}
 						)
 					}
