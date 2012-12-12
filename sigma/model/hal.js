@@ -109,6 +109,7 @@ steal(	'sigma/model'
 				setup:
 					function(data,resource)
 					{
+						console.log(this)
 						this._super()
 					var	self=this
 						this.resource=resource
