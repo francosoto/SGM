@@ -109,7 +109,6 @@ steal(	'sigma/model'
 				setup:
 					function(data,resource)
 					{
-						console.log(this)
 						this._super()
 					var	self=this
 						this.resource=resource
@@ -176,30 +175,29 @@ steal(	'sigma/model'
 					var	the_model = this._super(data)
 						the_model.links = new Sigma.Model.HAL.Links(data._links, the_model)
 						the_model.embedded
-						=	(can.isArray(data._embedded))
-								?(Sigma.Model.HAL.Resource).models(data._embedded)
-								:(
-									function(obs)
-									{
-										can.each(
-											data._embedded
-										,	function(propv,relation)
-											{
-												obs.attr(
-													relation
-												,	(	Sigma.Model.HAL.model_by_rel(relation)
-													||	Sigma.Model.HAL.Resource
-													)[
-														can.isArray(propv)
-														?'models'
-														:'model'
-													](propv)
-												)
-											}
-										)
-									return	obs
-									}
-								)(new can.Observe({}))
+						=	(
+								function(obs)
+								{
+									can.each(
+										data._embedded
+									,	function(propv,relation)
+										{
+											obs.attr(
+												relation
+											,	(	Sigma.Model.HAL.model_by_rel(relation)
+												||	Sigma.Model.HAL.Resource
+												)[
+													can.isArray(propv)
+													?'models'
+													:'model'
+												](propv)
+											)
+										}
+									)
+								return	obs
+								}
+							)(new can.Observe({}))
+
 					return	the_model
 					}
 			,	Fetch: function(url, rel)
