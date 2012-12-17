@@ -174,29 +174,23 @@ steal(	'sigma/model'
 							.pop()
 					var	the_model = this._super(data)
 						the_model.links = new Sigma.Model.HAL.Links(data._links, the_model)
-						the_model.embedded
-						=	(
-								function(obs)
-								{
-									can.each(
-										data._embedded
-									,	function(propv,relation)
-										{
-											obs.attr(
-												relation
-											,	(	Sigma.Model.HAL.model_by_rel(relation)
-												||	Sigma.Model.HAL.Resource
-												)[
-													can.isArray(propv)
-													?'models'
-													:'model'
-												](propv)
-											)
-										}
-									)
-								return	obs
-								}
-							)(new can.Observe({}))
+						the_model.embedded = new can.Observe({})
+						can.each(
+							data._embedded
+						,	function(propv,relation)
+							{
+								the_model.embedded.attr(
+									relation
+								,	(	Sigma.Model.HAL.model_by_rel(relation)
+									||	Sigma.Model.HAL.Resource
+									)[
+										can.isArray(propv)
+										?'models'
+										:'model'
+									](propv)
+								)
+							}
+						)
 
 					return	the_model
 					}
