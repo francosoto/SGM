@@ -1,5 +1,6 @@
 steal(
 	'sigma/hal/collections.js'
+,	'sigma/model/collections.js'
 ).then(
 	function()
 	{
@@ -147,18 +148,8 @@ steal(
 				).then(
 					function(collection)
 					{
-						Sigma.Model.HAL.Resource(
-							"Sigma.Model.HAL.Collection"
-						,	{
-								getRoot: function()
-									{
-									return	Sigma.Model.HAL.Collection.model({_links:{self:{href:'/provincias?items-per-page=2'}}}).Fetch()
-									}
-							}
-						,	{}
-						)
+						var the_first = Sigma.Model.HAL.Collection.getRoot('/provincias?items-per-page=2')
 						can.Model.List( 'Sigma.Model.HAL.Collection.List');
-						var the_first = Sigma.Model.HAL.Collection.getRoot()
 						the_first.then(
 							function(first)
 							{
@@ -203,29 +194,28 @@ steal(
 			"Collection CRUD"
 		,	function()
 			{
+				can.fixture('GET /provincias',steal.idToUri("//stock/fixtures/data/json/provincias.json").path)
 				stop()
-				can.when(
+				Sigma.fixtures.collection.scrollable.getCollectionsFixturator(
 					Sigma.fixtures.collection.getCollection("/provincias")
+					.pipe(
+						function(collection)
+						{
+							collection.items=collection.items.slice(1,6)
+						return	collection
+						}
+					)
 				).then(
 					function(collection)
 					{
-						collection.items=collection.items.slice(1,6)
-					var	page1
-					=	Sigma.fixtures.collection.pageable
-						.getPage(
-							collection
-						,	{
-								currentPage:1
-							,	itemsPerPage:2
-							,	collectionUrl:'/provincias'
-							}
-						)
-						ok(page1._links, "links OK");
-						ok(page1._embedded, "embedded OK");
-						ok(page1._links.next, "links.next OK");
-						ok(page1._embedded.collection, "_embedded.items OK");
-						equal(page1._embedded.collection[0]._links.self.href,'/provincias/0', "_embedded href OK");
-						equal(page1._embedded.collection.length,2, "length OK");
+						var coll = Sigma.Model.HAL.Collection.getRoot("/provincias")
+						coll.then(function(obj){
+							console.log(obj.getCollection())
+							console.log(obj.post())
+							console.log(obj)
+							equals(obj.embedded.constructor.fullName)
+
+						})
 						start()
 					}
 				)

@@ -118,6 +118,7 @@ steal(
 				.then(
 					function(pr)
 					{
+						console.log(pr)
 						ok(pr.links, "links OK");
 						equals(pr.constructor.fullName, "Test.HALSample", "Resource type ok");
 						//equals(pr.links.constructor.fullName, "Sigma.Model.HAL.Links", "links type ok");
