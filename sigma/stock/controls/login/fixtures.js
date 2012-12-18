@@ -1,4 +1,4 @@
-steal('can/util/fixture'
+steal('sigma/fixtures'
 ,	'sigma/hal/hal_builder.js'
 ).then(
     function(){
@@ -28,7 +28,7 @@ steal('can/util/fixture'
 						{
 						return	{
 								title: open_id.title
-							,	icon: open_id.name
+							,	icon: Sigma.fixtures.getIcon(open_id.name)
 							,	href: '/api/login/'+open_id.name
 							}
 						}

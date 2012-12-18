@@ -1,105 +1,32 @@
 steal(
-	'sigma/model/hal.js'
-).then(
 	'sigma/hal/store.js'
 ,	function()
 	{
-        module('sigma/hal/store')
-		test("csv2json ajax convert"
-		,	function()
-			{
-				stop();
-			var	store= can.ajax(
-						"hal/fixtures/items.csv"
-					)
-					.then(
-						function(items)
-						{
-							console.log(items)
-							ok(items,'OK')
-							start()
-						return	items
-						}
-					)
+        module('sigma/hal/store'
+		,	{
+				setup:
+					function()
+					{
+						can.fixture('GET /provincias',steal.idToUri("//stock/fixtures/data/json/provincias.json").path)
+						can.fixture('GET /instituciones-univ',steal.idToUri("//stock/fixtures/data/json/instituciones-univ.json").path)
+					}
 			}
 		)
-		test("Store-Deferreds-get"
+		test("Find & Filter"
 		,	function()
 			{
 				stop();
 			var	store
-			=	Sigma.fixtures
-				.store
-				.get(
-					"hal/fixtures/items.csv"
-				).then(
-					function(items)
-					{
-						ok(items,'OK')
-						start()
-					return	items
-					}
-				)
-			}
-		)
-		test("Store-Deferreds-union"
-		,	function()
-			{
-				stop();
-			var	store
-			=	Sigma.fixtures
-				.store
-				.union(
-					"hal/fixtures/items.csv"
-				,	"hal/fixtures/mas-items.csv"
-				).then(
-					function(items)
-					{
-						ok(items,'OK')
-						start()
-					return	items
-					}
-				)
-			}
-		)
-		test("Store-Deferreds-join"
-		,	function()
-			{
-				stop();
-			var	join
-			=	Sigma.fixtures
-				.store
-				.join(
-					Sigma.fixtures
-					.store
-					.get(
-						"hal/fixtures/provincias.csv"
-					)
-				,		"hal/fixtures/instituciones-univ.csv"
-				,	function(provincia, institucion)
-					{
-					return	institucion.provincia==provincia.id_provincia
-					}
-				).pipe(
-					function(provincias)
-					{
-					return can
-						.map(
-							provincias
-						,	function(provincia)
-							{
-								provincia.instituciones=provincia.joined
-								delete	provincia.joined
-							return	provincia
-							}
-						)
-					}
-				)
+			=	new Sigma.fixtures
+				.store( ['/provincias','/instituciones-univ'])
+				store
 				.then(
-					function(items)
+					function(store)
 					{
-						ok(items[0].joined==undefined,'joined undefined OK')
-						ok(items[0].instituciones,'instituciones OK')
+						equal(store.prefetchs['/provincias'][0].id,'BUE','provincias OK')
+						ok(store.prefetchs['/instituciones-univ'],'instituciones OK')
+						equal(store.find('/provincias','id','BUE').id,'BUE','store.find OK')
+						equal(store.filter('/instituciones-univ','provincia','BUE').length,8,'store.filter OK')
 						start()
 					}
 				)

@@ -1,24 +1,13 @@
-steal('can/util/fixture'
+steal('sigma/fixtures'
 ,	'sigma/hal/hal_builder.js'
 ).then(
-    function()
+	function()
 	{
 		can.fixture("GET /api/{username}"
 		,	function(original)
 			{
-			var	getProfile
-			=	function(ajax_params)
-				{
-				var	uname
-				=	ajax_params.url.match('.*/\(.*\)$')[1]
-				return	{
-						username: uname
-					,	greeting:'Hola '+uname
-					//,	applications: SRU.fixtures.profile_data.applications_array
-					//,	reports: SRU.fixtures.profile_data.reports
-					}
-				}
-			   var	profile=getProfile(original)
+			var	profile
+			=	Sigma.fixtures.getProfile(original)
 			return	new Sigma.fixtures
 				.hal_builder(
 					{
@@ -28,6 +17,11 @@ steal('can/util/fixture'
 					,	greeting:profile.greeting
 					}
 				,	'/api/'+profile.username
+				).link(
+					{
+						applications:
+							Sigma.fixtures.genApplications(profile)
+					}
 				).get_document()
 			}
 		)

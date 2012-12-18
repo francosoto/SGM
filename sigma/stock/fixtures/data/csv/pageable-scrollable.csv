@@ -1,0 +1,28 @@
+id,name,last_name,email,catter
+1,Franco,Soto,f.soto@gmail.com,true
+2,German,Cabral,g.cabral@gmail.com,true
+3,Matias,Rios,m.rios@gmail.com,true
+4,Juan,Prongue,j.prongue@gmail.com,false
+5,Neri,Guidi,n.guidi@gmail.com,true
+6,Carina,Luquez,c.luquez@gmail.com,true
+7,Julian,Farina,j.farina@gmail.com,false
+8,Nombre 7,Apellido 7,mail7@gmail.com,true
+9,Nombre 8,Apellido 8,mail8@gmail.com,false
+10,Nombre 9,Apellido 9,mail9@gmail.com,true
+11,Nombre 10,Apellido 10,mail10@gmail.com,true
+12,Nombre 11,Apellido 11,mail11@gmail.com,false
+13,Nombre 12,Apellido 12,mail12@gmail.com,true
+14,Nombre 13,Apellido 13,mail13@gmail.com,true
+15,Nombre 14,Apellido 14,mail14@gmail.com,false
+16,Nombre 15,Apellido 15,mail15@gmail.com,false
+17,Nombre 16,Apellido 16,mail16@gmail.com,false
+18,Nombre 17,Apellido 17,mail17@gmail.com,false
+19,Nombre 18,Apellido 18,mail18@gmail.com,true
+20,Nombre 19,Apellido 19,mail19@gmail.com,true
+21,Nombre 20,Apellido 20,mail20@gmail.com,false
+22,Nombre 21,Apellido 21,mail21@gmail.com,true
+23,Nombre 22,Apellido 22,mail22@gmail.com,false
+24,Nombre 23,Apellido 23,mail23@gmail.com,false
+25,Nombre 14,Apellido 24,mail24@gmail.com,true
+26,Nombre 25,Apellido 25,mail25@gmail.com,false
+27,Nombre 26,Apellido 26,mail26@gmail.com,true

@@ -1,0 +1,24 @@
+<ul class="media-list">
+{{#collection}}
+	<li class="media well span6">
+		<a class="pull-left thumbnail" href="#">
+			<img src="http://placehold.it/100x100" class="img-circle">
+		</a>
+		<div class="media-body span3">
+			<h4 class="media-heading">{{last_name}} , {{name}}</h4>
+			<div class="media">
+				<address>
+					<strong> 
+						Is a Catter? 	
+					</strong> 
+						{{catter}}
+					<br>
+					<a href="mailto:#">
+						{{email}}
+					</a>
+				</address>
+			</div>
+		</div>
+	</li>
+{{/collection}}
+</ul>

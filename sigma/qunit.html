@@ -14,10 +14,15 @@
 	    <script type='text/javascript'>
 steal(	'funcunit/qunit'
 ).then(
+   'can'
+,	'can/util/fixture'
+,	'sigma/lib'
+).then(
 	'sigma/model/hal_test.js'
 ,	'sigma/hal/hal_builder_test.js'
 ,	'sigma/hal/collections_test.js'
 ,	'sigma/hal/store_test.js'
+,	'sigma/model/json2hal_test.js'
 ,	'sigma/stock/controls/tests.js'
 )
 	    </script>

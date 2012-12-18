@@ -2,7 +2,7 @@ steal(	'sigma/model'
 ,	'sigma/lib/uritemplates.js'
 ,	function()
 	{
-		can.Construct('Sigma.Model')
+          NS('Sigma.Model')
 		Sigma.Model.HAL=
 			new can.Observe(
 					{

@@ -1,0 +1,32 @@
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Nombre</th>
+			<th>Apellido</th>
+			<th>Email</th>
+			<th>Catter</th>
+		</tr>
+	</thead>
+	<tbody>
+	{{#collection}}
+		<tr>
+			<td>
+				{{id}}
+			</td>
+			<td>
+				{{name}}
+			</td>
+			<td>
+				{{last_name}}
+			</td>
+			<td>
+				{{email}}
+			</td>
+			<td>
+				{{catter}}
+			</td>
+		</tr>
+	{{/collection}}
+	</tbody>
+</table>	

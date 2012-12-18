@@ -1,162 +1,84 @@
 steal(
 	'can'
+,	'underscore'
+,	'sigma/lib'
+,	'sigma/fixtures'
 ).then(
 	function()
 	{
-        Sigma.fixtures=Sigma.fixtures||{}
-	var	line_separator
-	=	'\n'
-	,	field_separator
-	=	','
-	,	unquote
-	=	function(item)
-		{
-		return	item.replace(/^"|"$/g,"")
-		}
-	,	toCsv
-	=	function(raw_text)
-		{
-		var	lines
-		=	raw_text
-			.split(line_separator)
-		,	headers
-		=	lines[0]
-			//.shift()
-			.split(field_separator)
-			.map(unquote)
-		return	lines
-			.map(
-				function(line)
-				{
-				var	result ={}
-				,	fields
-				return	line
-					.split(field_separator)
-					.map(unquote)
-				}
-			)
-		}
-	,	toJson
-	=	function(csv_data)
-		{
-		var	lines
-		=	csv_data
-		,	headers
-		=	lines
-			.shift()
-		return	lines
-			.map(
-				function(line)
-				{
-				var	result ={}
-				,	fields
-				=	line
-					.map(unquote)
-
-					can
-					.each(
-						headers
-					,	function(header,index)
-						{
-							result[header.toLowerCase()]=fields[index]
-						}
-					)
-				return	result
-				}
-			)
-		}
-		can.ajaxPrefilter(
-			function(options)
-			{
-			return	(/\.csv/.test(options.url))
-						?'csv-json'
-						:options.dataType
-			}
-		)
-		can.ajaxSetup(
-			{
-				accepts:
-					{
-						'csv':	"text/csv"
-					,	'csv-json':	"text/csv"
-					}
-			,	contents:
-					{
-						'csv':	/csv/
-					,	'csv-json':	/csv-json/
-					}
-			,	converters:
-					{
-						"text csv":toCsv
-					,	"csv csv-json":toJson
-					}
-			}
-		)
 		can.Construct(
 			'Sigma.fixtures.store'
 		,	{
-				defaults:
-					{
-						line_separator:'\n'
-					,	field_separator:','
-					}
-			,	union:
-					function()
-					{
-					var	args
-					=	arguments
-					return	can.when
-							.apply(
-								null
-							,	can.map(
-									args
-								,	this._get_one
-								)
-							).pipe(
-								function()
-								{
-								return	Array
-									.prototype
-									.concat
-									.apply([],arguments)
-								}
-							)
-					}
-			,	join:
-					function(left_dfd,right_url,pred)
+			}
+		,	{
+				init:
+					function(urls)
 					{
 					var	self
 					=	this
-					return can.when(
-							left_dfd
-						,	self.get(right_url)
+						this.prefetchs=[]
+						this.deferred=can.Deferred()
+						this.deferred.promise(this)
+						can.when
+						.apply(
+							null
+						,	can.map(
+								urls
+							,	this.proxy('get')
+							)
 						).then(
-							function(data_left, data_right)
+							function()
 							{
-							return can.map(
-									data_left[0]
-								,	function(lobj)
-									{
-										var	prop='joined'
-										lobj[prop]
-										=	can
-											.grep(
-												data_right[0]
-											,	function(rval)
-												{
-												return	pred(lobj,rval)
-												}
-											)
-										return lobj
-									}
-								)
+							self.deferred.resolve(self)
+							}
+						)
+					}
+			,	filter:
+					function(what,by_key,by_id)
+					{
+					return	_
+						.filter(
+							this.prefetchs[what]
+						,	function(item)
+							{
+							return	item[by_key]==by_id
+							}
+						)
+					}
+			,	find:
+					function(what,by_key,id_to_find)
+					{
+					return	_
+						.find(
+							this.prefetchs[what]
+						,	function(item,key)
+							{
+							return	item[by_key]==id_to_find
 							}
 						)
 					}
 			,	get:
-					function(url)
+					function(what)
 					{
+					var	self
+					=	this
+					,	url
+					=	_.isString(what)
+							?what
+							:what.url
+					,	name
+					=	_.isString(what)
+							?what
+							:what.name
 					return	this._get_one(url)
+						.pipe(
+							function(data)
+							{
+								self.prefetchs[name]
+								=	data
+							return	data
+							}
+						)
 					}
 			,	_get_one:
 					function(what)
@@ -166,7 +88,6 @@ steal(
 						//.pipe(toJson)
 					}
 			}
-		,	{}
 		)
 	}
 )

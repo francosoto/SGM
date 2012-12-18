@@ -1,7 +1,9 @@
 steal(
-	'sigma/model/hal.js'
-).then(
-	'sigma/hal/hal_builder.js'
+	'sigma/lib/hal'
+,	'sigma/fixtures'
+,	'underscore'
+,	'can'
+).then(	'sigma/hal/hal_builder.js'
 ,	function()
 	{
 		module("sigma/hal/builder")
@@ -22,8 +24,25 @@ steal(
 								{
 									inner_data:1
 								}
-							,	'/innerData'
+							,	'/innerSingularData'
 							)
+					,	the_embeddeds:
+							[
+								new Sigma.fixtures
+								.hal_builder(
+									{
+										inner_data:2
+									}
+								,	'/innerPluralData'
+								)
+							,	new Sigma.fixtures
+								.hal_builder(
+									{
+										inner_data:3
+									}
+								,	'/innerPluralData'
+								)
+							]
 					}
 				)
 				.get_document()
@@ -31,8 +50,10 @@ steal(
 				ok(doc._links.yes, "conditional positive link OK")
 				ok(!doc._links.no, "conditional negative link OK")
 				ok(doc._embedded, "embedded OK")
-				ok(doc._embedded.the_embedded, "_embedded.the_embedded == undefined (singular) OK")
-				ok(!doc._embedded.the_embeddeds, "_embedded.the_embeddeds (plural) OK")
+				ok(doc._embedded.the_embedded, "_embedded.the_embedded (singular) OK")
+				equal(doc._embedded.the_embedded.length,undefined, "length of singular embeddeds OK")
+				ok(doc._embedded.the_embeddeds, "_embedded.the_embeddeds (plural) OK")
+				equal(doc._embedded.the_embeddeds.length,2, "length of plural embeddeds OK")
 				ok(doc.the_data, "data OK")
 				//array
 				ok(doc._links.array, "array links OK")

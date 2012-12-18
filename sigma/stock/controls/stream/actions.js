@@ -1,28 +1,16 @@
 Sigma.HypermediaControl(
-	'Sigma.Hypermedia.Action'
+	'Sigma.Hypermedia.Actions'
 ,	{
-		defaults:
-		{
-			title:'3'
-		,	view:'//sigma/stock/views/stream/actions.ejs'
-		//,	view:'views/actions.ejs'
-		,	css:
-				{
-					'font-size':'20px'
-				,	'padding':'5px'
-				,	'border-radius':'5px'
-				}
-		,	css_list:
-				{
-					'float':'right'
-				,	'list-style-type': 'none'
-				}
+		defaults: {
+			view : false
 		}
 	}
 ,	{
 		init: function(element,options)
 		{
-			var self = this
+			/* Remplasable por el llamado de una nueva vista dentro de la vista pasada al HControl, 
+			   pasandole como argumento el action a renderizar...
+			
 			var AC = function(el,actions)
 			{
 				el.data('actions',actions)
@@ -43,17 +31,16 @@ Sigma.HypermediaControl(
 						}
 					)
 			}
-
-			var $body = element
-					.html(
-						can.view(
-							this.options.view
-						,	this.options.data
-						,	{
-								ActionsControl : AC
-							}
-						)
-					)
+			
+			*/
+			
+			can.append(
+				element
+			,	can.view(
+					this.options.view
+				,	this.options.data
+				)
+			)
 		}
 	}
 )

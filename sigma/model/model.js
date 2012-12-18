@@ -6,10 +6,6 @@ steal(	'can/construct/super'
 ,	'can/util/fixture'
 ,	function()
 	{
-		can.Construct('Sigma.Model')
-		/*
-		window.Sigma=window.Sigma||{}
-		window.Sigma.Model=window.Sigma.Model||{}
-	       */
+           NS('Sigma.Model')
 	}
 )

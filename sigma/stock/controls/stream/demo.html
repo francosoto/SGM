@@ -10,7 +10,7 @@
 	<script type='text/javascript' src="../../../../steal/steal.js"></script>
 	<style type="text/css">
 		body {
-			padding-top: 60px;
+			padding-top: 90px;
 			padding-bottom: 40px;
 		}
 		#home .container-fluid {
@@ -50,10 +50,14 @@
 	<div id="stream" class="span9"></div>
 <script type='text/javascript'>
 	steal(
+		'can/view/mustache'
+	,	'sigma/fixtures'
+	).then(
 		'sigma/stock/controls/stream'
 	,	'sigma/stock/controls/stream/fixtures.js'
-	).then(
-		'sigma/stock/controls/lib/media.css'
+	,	'sigma/stock/controls/stream/stream_adapter.js'
+	,	'sigma/stock/controls/lib/media.css'
+	,	'sigma/stock/controls/stream/stream.css'
 	,	'sigma/lib/style.js'
 	).then(	function()
 		{
@@ -76,7 +80,8 @@
 				}
 			,	{}
 			)
-		var stream_container = new
+			
+			var stream_container = new
 				Sigma.Hypermedia.Stream.Container(
 					$('#stream')
 				,	{

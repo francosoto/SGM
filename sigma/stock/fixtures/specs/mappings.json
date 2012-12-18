@@ -1,0 +1,34 @@
+{
+	"provincias":
+		{
+			"fields":
+				{
+					"id":	"ID_PROVINCIA"
+				,	"desc":	"DESCRIPCION"
+				}
+		}
+,	"instituciones-univ":
+		{
+			"fields":
+				{
+					"id":	"ID_ UNIVERSIDAD"
+				,	"type":	"TIPO_UNIV"
+				,	"name":	"UNIVERSIDAD"
+				,	"postal_code":	"COD.POSTAL"
+				,	"address":	"DIRECCION"
+				,	"city":	"CIUDAD"
+				,	"provincia":"PROVINCIA"
+				}
+		}
+,	"pageable-scrollable":
+		{
+			"fields":
+				{
+					"id":	"ID"
+				,	"name":	"NOMBRE"
+				,	"last_name":	"APELLIDO"
+				,	"email":	"EMAIL"
+				,	"catter":	"CATTER"
+				}
+		}
+}

@@ -51,11 +51,11 @@ steal(
 							.hal_builder(
 								{
 									title: comment.owner
-										,	icon: comment.icon
-										,	description: comment.value
-										,	icon_align: (index % 2) ? 'right' : 'left'
+								,	icon: comment.icon
+								,	description: comment.value
+								,	icon_align: (index % 2) ? 'right' : 'left'
 								}
-									,	url+'/comments'+'/'+comment.owner
+							,	url+'/comments'+'/'+comment.owner
 							).link(
 								{
 									'actions': genActions(url+'/comments'+'/'+comment.owner)
@@ -89,7 +89,7 @@ steal(
 							,	'/posts/'+post.owner
 							).link(
 								{
-								'comments':
+									'comments':
 									{
 										href:'/comments'
 									}

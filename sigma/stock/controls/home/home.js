@@ -2,7 +2,6 @@ steal(
 	'sigma/lib'
 ,	'sigma/lib/hypermedia.js'
 ,	'sigma/util'
-,	'sigma/lib/style.js'
 ).then(
 	function() {
 		Sigma.HypermediaControl(

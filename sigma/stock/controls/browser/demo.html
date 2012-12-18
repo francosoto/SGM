@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="author" content="Sigma-IT">
+	<title>Sigma - Browser demo</title>
+	<script type='text/javascript' src="../../../../steal/steal.js"></script>
+	<style type="text/css">
+		body {
+			padding-top: 100px;
+			padding-bottom: 40px;
+		}
+		#session .container-fluid {
+			margin-left: auto;
+			margin-right: auto;
+			max-width: 500px;
+		}
+		#root {
+			margin-left: auto;
+			margin-right: auto;
+			max-width: 800px;
+		}
+
+	</style>
+	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+</head>
+<body>
+<div id="topbar" class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container-fluid">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+			<a class="brand" href="#">
+				<h1>Browser Demo</h1>
+			</a>
+			<div id='home' class="nav-collapse" >
+			</div>
+		</div>
+	</div>
+</div>
+	<div id="session"></div>
+	<div id="root"></div>
+<script type='text/javascript'>
+	steal(
+		'sigma/stock/controls/home'
+	).then(
+		'sigma/stock/controls/lib/media.css'
+	,	'sigma/lib/style.js'
+	).then(
+		'sigma/stock/controls/login/fixtures.js'
+	,	'sigma/stock/controls/home/fixtures.js'
+	).then(
+		//'./browser'
+		'sigma/stock/controls/browser'
+	).then(
+		'sigma/stock/controls/home'
+	).then(
+		function()
+		{
+			Sigma.HypermediaContainer(
+				'HAL.Container'
+			,	{
+					defaults:
+						{
+							media_types:
+							{
+								'root':{
+										Handler:Sigma.Controls.Browser
+									,	options:{
+											target: 'Root'
+										,	login_target: 'Root'
+										}
+									}
+							,	'/profile/session':{
+										Handler:Sigma.Controls.Session
+									,	options:{
+											target: 'Session'
+										}
+									}
+							,	'profile':{
+										Handler:Sigma.Controls.Home
+									,	options:{
+											target: 'Root'
+										,	view: '//stock/views/home/init.ejs'
+										}
+									}
+							}
+						,	'default_media_type':{
+										Handler:Sigma.HypermediaControl
+									,	options:{
+											target: 'Root'
+										}
+									}
+						}
+				,	setup:
+						function()
+						{
+							this._instance=false
+						return	this._super.apply(this,arguments)
+						}
+				}
+			,	{
+					setup:
+						function(el,options)
+						{
+							this.constructor._instance=this
+						return	this._super(el,options)
+						}
+				}
+			)
+			Sigma.HypermediaContainer(
+				'HAL.Session.Container'
+			,	{
+					defaults:
+						{
+							media_types:
+							{
+								'session':{
+										Handler:Sigma.Controls.Session
+									,	options:{
+											target: 'Root'
+										}
+									}
+							,	'profile':{
+										Handler:Sigma.Controls.Home
+									,	options:{
+											target: 'Root'
+										//,	view: '//stock/views/home/init.ejs'
+										}
+									}
+							}
+						,	'default_media_type':{
+										Handler:Sigma.HypermediaControl
+									,	options:{
+											target: 'Root'
+										}
+									}
+						}
+				}
+			,	{ }
+			)
+		var	root_container	=new
+				HAL.Container(
+					$('#root')
+				,	{
+						id:'Root'
+					,	slot:Sigma.Model.HAL.Resource.getRoot('/api')
+					}
+				)
+		var	session_container	=new
+				HAL.Session.Container(
+					$('#home')
+				,	{
+						id:'Session'
+					,	target:'Root'
+					}
+				)
+		}
+	)
+</script>
+</body>
+</html>

@@ -1,5 +1,3 @@
-Sigma=window.Sigma||{}
-Sigma.fixtures=Sigma.fixtures||{}
 steal(
 	'jquery'
 ,	'jquery/event'
@@ -11,4 +9,6 @@ steal(
 ,	'can/control/route'
 ,	'can/control/plugin'
 ,	'can/construct/super'
+).then(
+	'sigma/util'
 )

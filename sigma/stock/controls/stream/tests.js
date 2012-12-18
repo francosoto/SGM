@@ -1,9 +1,13 @@
 steal(
 	'sigma/stock/controls/stream'
+,	'sigma/stock/controls/stream/stream_adapter.js'
 ,	'sigma/stock/controls/stream/fixtures.js'
 ).then(
 	function()
 	{
+		module(
+			"sigma/stock/controls"
+		)
 		test(
 			"Stream Hypermedia"
 		,	function()
@@ -58,7 +62,7 @@ steal(
 						{
 							start()
 							equal(data.constructor.fullName,"Sigma.Model.HAL.Resource.Stream","Resource Generated")
-							equal(stream.find('div.media-body h4').length,9,"Stream Generated")
+							equal(stream.find('div.media-body h4').length,10,"Stream Generated")
 							equals(data.embedded.attr('posts.0').constructor.fullName,"Sigma.Model.HAL.Posts", "embedded type ok");
 							equals(data.embedded.attr('posts.0').embedded.attr('comments.0').constructor.fullName,"Sigma.Model.HAL.Comments", "embedded type ok");
 						}

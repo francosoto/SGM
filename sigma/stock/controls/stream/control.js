@@ -17,12 +17,12 @@ Sigma.HypermediaControl(
 						:'<div>'
 			,	klass=
 					is_list
-						?'medias'
+						?'media-list'
 						:'media'
 				this.$media=
 					existing
 						?element
-						:$(tag)
+						:can.$(tag)
 							.addClass(klass)
 							.appendTo(this.element)
 				this[
@@ -31,55 +31,65 @@ Sigma.HypermediaControl(
 						:'_render_media'
 				](this.$media,this.options.slot)
 		}
-	,	_render_medias:	function(element,data)
+
+	,	_render_medias:	function(element,slots)
 		{	
-			var	self=this
-			return	element
-				.list(
-					{
-						loading : function() { return 'Cargando'; }
-					,	empty : function() { return 'Nada!' }
-					,	view:function(data)
-							{
-							var	element
-									=$('<li>')
-									.addClass(data.identity())
-									.addClass('media')
-									new Sigma.Hypermedia.Stream(element,{slot:data})
-							return	element
-							}
-					,	list:data
-					}
-				)
+			can.each(
+				slots
+			,	function(media)
+				{
+					new Sigma.Hypermedia.Stream(
+						can.$('<li>')
+							.addClass('media')
+							.addClass(media.identity())
+							.appendTo(element)
+					,	{ 
+							slot: media
+						}
+					)
+				}
+			)
+			
+			return element
 		}
+
 	,	_render_media:	function(element,data)
 		{
-			element.addClass(data.identity())
-			this.media_controls = can.map(
+			can.each(
 				[
 					{
 						control: Sigma.Hypermedia.Object
 					,	class:'media-object'
+					//,	view: '//sigma/stock/views/stream/object.ejs'
+					,	view: '//sigma/stock/views/stream/object.mustache'
 					}
 				,	{
 						control: Sigma.Hypermedia.Body
 					,	class:'media-body'
+					//,	view: '//sigma/stock/views/stream/body.ejs'
+					,	view: '//sigma/stock/views/stream/body.mustache'
 					}
 				,	{
-						control: Sigma.Hypermedia.Action
+						control: Sigma.Hypermedia.Actions
 					,	class:'media-actions'
+					//,	view: '//sigma/stock/views/stream/actions.ejs'
+					,	view: '//sigma/stock/views/stream/actions.mustache'
 					}
 				]
-			,	function(opt)
+			,	function(media)
 				{
-					return	new opt.control(
-							$('<div>')
-								.addClass(opt.class)
-								.appendTo(element)
-						,	{data:data}
-						)
+					new media.control(
+						$('<div>')
+							.addClass(media.class)
+							.appendTo(element)
+					,	{
+							data : data
+						,	view : media.view
+						}
+					)
 				}
 			)
+
 			return	element
 		}
 	}

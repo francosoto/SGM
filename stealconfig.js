@@ -7,7 +7,7 @@ steal.config({
 	},
 	paths: {
 		"jquery": "can/util/jquery/jquery.1.8.2.js"
-	,	"//stock/views/": "//sigma/stock/views/"
+	,	"//stock/": "//sigma/stock/"
 	,	"sigma/lib/hal/": "js-hal/"
 	,	'sigma/lib/store2/':'https://raw.github.com/gist/3982154/'
 	},

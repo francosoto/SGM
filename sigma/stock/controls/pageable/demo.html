@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="author" content="Sigma-IT">
+	<title>SGM/Pageable Demo</title>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div id="topbar" class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a class="brand" href="#">
+					<h1>Pageable Demo</h1>
+				</a>
+				<div id='home' class="nav-collapse" >
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="paginableContainer" class="span7"></div>
+    	<script type='text/javascript' src='../../../../steal/steal.js'></script>
+    	<style type="text/css">
+		body {
+			padding-top: 90px;
+			padding-bottom: 40px;
+		}
+		#home .container-fluid {
+			margin-left: auto;
+			margin-right: auto;
+			max-width: 500px;
+		}
+		#root {
+			margin-left: auto;
+			margin-right: auto;
+			max-width: 800px;
+		}
+
+	</style>
+</body>
+</html>
+
+<script type="text/javascript">
+
+	steal(
+		'sigma/stock/controls/lib'
+	,	'can/view/mustache'
+	,	'sigma/fixtures'
+	).then(
+		'sigma/stock/controls/pageable'
+	,	'sigma/stock/controls/pageable/adapters.js'
+	).then(
+		'sigma/lib/style.js'
+	,	function()
+		{
+			Sigma.HypermediaContainer(
+				'Sigma.Hypermedia.Pageable.Container'
+			,	{
+					defaults:
+					{
+						media_types:
+						{
+							'pageable':
+							{
+								Handler: Sigma.Controls.Pageable
+							,	options:
+								{
+									target: 'paginable'
+								,	view_links: '//stock/views/pageable/links.mustache'
+								,	view_content: '//stock/views/pageable/content.mustache'
+								}
+							}
+						}
+					}
+				}
+			,	{
+				}
+			)
+
+			Sigma.fixtures.collection(
+				'Pageable'
+			,	{}
+			,	{}
+			)
+
+			Pageable.defaults 
+			= 	{
+					assets_path:'../../fixtures/data/json'
+				,	ext:'.json'
+				}
+
+			Sigma.fixtures.collection.pageable.getCollectionsFixturator(
+					Pageable.getCollection("/pageable-scrollable")
+			).then(
+				function()
+				{
+					new Sigma.Hypermedia.Pageable.Container(
+						$('#paginableContainer')
+					,	{
+							id: 'Pageable'
+						,	target: 'Pageable'
+						,	slot: Sigma.Model.HAL.Collection.getRoot('/pageable-scrollable?page=1&items-per-page=5','pageable')
+						}
+					)
+				}
+			)
+		}
+
+	)
+
+</script>

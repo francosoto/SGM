@@ -9,8 +9,11 @@
     <script type='text/javascript' src='../../../steal/steal.js'></script>
 	    <script type='text/javascript'>
 steal(
-	'//funcunit/qunit/qunit.js'
-,	'//funcunit/qunit/qunit.css'
+	'funcunit/qunit'
+).then(
+   	'can'
+,	'can/util/fixture'
+,	'sigma/lib'
 ).then(
 	'sigma/stock/controls/tests.js'
 )

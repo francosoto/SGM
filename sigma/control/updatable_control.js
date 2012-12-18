@@ -26,7 +26,17 @@ steal(	'sigma/lib'
 					{
 						//this._super.apply(this,arguments)
 						can.each(
-							['loading','empty','view']
+							this.options
+						,	this.proxy(
+								function(val,prop)
+								{
+									if(/^view/.test(prop))
+										this.options[prop]=steal.idToUri(val).path
+								}
+							)
+						)
+						can.each(
+							['loading','empty']
 						,	this.proxy(
 								function(what)
 								{

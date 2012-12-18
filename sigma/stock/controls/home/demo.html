@@ -10,7 +10,7 @@
 	<script type='text/javascript' src="../../../../steal/steal.js"></script>
 	<style type="text/css">
 		body {
-			padding-top: 60px;
+			padding-top: 90px;
 			padding-bottom: 40px;
 		}
 		#home .container-fluid {
@@ -51,11 +51,12 @@
 	<div id="root"></div>
 <script type='text/javascript'>
 	steal(
-		'sigma/lib/hypermedia.js'
-	,	'sigma/stock/controls/home'
-	,	'sigma/stock/controls/home/fixtures.js'
+		'sigma/stock/controls/lib'
 	).then(
-		'sigma/stock/controls/lib/media.css'
+		'sigma/stock/controls/home/fixtures.js'
+	).then(
+		'sigma/stock/controls/home'
+	,	'sigma/stock/controls/lib/media.css'
 	,	'sigma/lib/style.js'
 	).then(	function()
 		{

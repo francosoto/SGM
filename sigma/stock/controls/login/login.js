@@ -50,7 +50,7 @@ steal(
 									)
 							}
 						)
-						this.element.html(can.view(this.options.view,options));
+						this.element.html(can.view(Sigma.stock.views(this.options.view),options));
 					}
 			,	'[data-relation] click':
 					function(el, ev)

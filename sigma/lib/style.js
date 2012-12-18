@@ -12,5 +12,3 @@ var	use_less=false
 .then(	'bootstrap/js/bootstrap-collapse.js'
 ,	'bootstrap/js/bootstrap-dropdown.js'
 )
-
-

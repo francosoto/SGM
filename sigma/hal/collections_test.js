@@ -8,6 +8,7 @@ steal(
 			"getCollection Pageable"
 		,	function()
 			{
+				can.fixture('GET /provincias',steal.idToUri("//stock/fixtures/data/json/provincias.json").path)
 				stop()
 				can.when(
 					Sigma.fixtures.collection.getCollection("/provincias")
@@ -40,6 +41,7 @@ steal(
 			"getCollection Scrollable"
 		,	function()
 			{
+				can.fixture('GET /provincias',steal.idToUri("//stock/fixtures/data/json/provincias.json").path)
 				stop()
 				can.when(
 					Sigma.fixtures.collection.getCollection("/provincias")
@@ -72,6 +74,7 @@ steal(
 			"Sigma.Model.HAL.Collection Pageable"
 		,	function()
 			{
+				can.fixture('GET /provincias',steal.idToUri("//stock/fixtures/data/json/provincias.json").path)
 				stop()
 				Sigma.fixtures.collection.pageable.getCollectionsFixturator(
 					Sigma.fixtures.collection.getCollection("/provincias")
@@ -130,6 +133,7 @@ steal(
 			"Sigma.Model.HAL.Collection Scrollable"
 		,	function()
 			{
+				can.fixture('GET /provincias',steal.idToUri("//stock/fixtures/data/json/provincias.json").path)
 				stop()
 				Sigma.fixtures.collection.scrollable.getCollectionsFixturator(
 					Sigma.fixtures.collection.getCollection("/provincias")
