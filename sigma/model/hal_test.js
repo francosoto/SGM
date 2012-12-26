@@ -140,8 +140,8 @@ steal(
 			{
 				stop();
 				Sigma.Model.HAL.Resource("Sigma.Model.HAL.Single")
-				Sigma.Model.HAL.Resource("Sigma.Model.HAL.Collection")
-				can.Model.List( 'Sigma.Model.HAL.Collection.List');
+				/*Sigma.Model.HAL.Resource("Sigma.Model.HAL.Collection")
+				can.Model.List( 'Sigma.Model.HAL.Collection.List');*/
 				var hal_sample = Test.HALSample.getRoot(1)
 				hal_sample
 				.then(
@@ -161,7 +161,7 @@ steal(
 			{
 				stop();
 				Sigma.Model.HAL.Resource("Sigma.Model.HAL.Single")
-				Sigma.Model.HAL.Resource("Sigma.Model.HAL.Collection")
+				//Sigma.Model.HAL.Resource("Sigma.Model.HAL.Collection")
 				var hal_sample = Test.HALSample.getRoot(1)
 				//Test.HALSample.bind('root',function(what){console.log({created:what})})
 				hal_sample

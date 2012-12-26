@@ -34,13 +34,7 @@ steal(	'sigma/model'
 					,	set_attributes:
 							function(item, attributes)
 							{
-								can.each(
-									attributes,
-									function(val, index)
-									{
-										item[index] = val
-									}
-								)
+								can.extend(item,attributes)
 								return item
 							}							
 					}
