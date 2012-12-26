@@ -3,7 +3,7 @@ steal(
 ).then(
 	function()
 	{
-		Sigma.Model.HAL.Resource(
+		/*Sigma.Model.HAL.Resource(
 			'Sigma.Model.HAL.Collection'
 		,	{}
 		,	{
@@ -22,6 +22,6 @@ steal(
 			}
 		)
 
-		can.Model.List( 'Sigma.Model.HAL.Collection.List');
+		can.Model.List( 'Sigma.Model.HAL.Collection.List');*/
 	}
 )
