@@ -90,9 +90,8 @@ steal(
 					function(collection)
 					{
 					var	the_first
-					=	Sigma.Model.HAL.Resource("Sigma.Model.HAL.Collection")
-						.getRoot('/provincias?items-per-page=2');
-						can.Model.List( 'Sigma.Model.HAL.Collection.List');
+					=	Sigma.Model.HAL.Collection.getRoot('/provincias?items-per-page=2');
+						//can.Model.List( 'Sigma.Model.HAL.Collection.List');
 						the_first.then(
 							function(first)
 							{
@@ -201,6 +200,7 @@ steal(
 					.pipe(
 						function(collection)
 						{
+							console.log(collection)
 							collection.items=collection.items.slice(1,6)
 						return	collection
 						}
@@ -210,13 +210,24 @@ steal(
 					{
 						var coll = Sigma.Model.HAL.Collection.getRoot("/provincias")
 						coll.then(function(obj){
-							console.log(obj.getCollection())
-							console.log(obj.post())
+							
 							console.log(obj)
-							equals(obj.embedded.constructor.fullName)
-
+							console.log(obj.getCollection())
+							ok(obj)
+							equals(obj.embedded.collection.constructor.fullName,"Sigma.Model.HAL.Collection.List","Collection Fullname type ok")
+							equals(obj.embedded.attr('collection.0').constructor.fullName,"Sigma.Model.HAL.Collection","Collection element Fullname type ok")
+							equals(obj.embedded.collection.length,5,"Collection length ok")
+							obj.post({id: "ANT", desc: "Antartida"})
+							equals(obj.embedded.collection.length,6,"Collection length ok")
+							equals(obj.embedded.attr('collection.5').constructor.fullName,"Sigma.Model.HAL.Collection","Collection new element Fullname type ok")
+							equals(obj.embedded.attr('collection.5').desc,"Antartida","Data true")
+							obj.put("ANT",{desc: "German Ladri"})
+							equals(obj.embedded.attr('collection.5').desc,"German Ladri","Data desc update true")
+							obj.del("ANT")
+							equals(obj.embedded.collection.length,5,"Collection length ok")
+							equals(obj.embedded.attr('collection.5'),undefined,"Data remove from collection true")
+							start()
 						})
-						start()
 					}
 				)
 			}
