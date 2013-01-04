@@ -46,7 +46,7 @@ steal(
 								,	current_page
 								=	parseInt(parsed.queryKey.page)||undefined
 								,	items_per_page
-								=	parseInt(parsed.queryKey['items-per-page'])||10
+								=	parseInt(parsed.queryKey['items-per-page'])||30
 								,	name
 								=	parsed.path.split('/').pop()
 								return	 self
@@ -59,6 +59,51 @@ steal(
 										}
 									)
 								}
+							,	del
+							=	function(original)
+								{
+								var 	id = original.url.split('/').pop()
+								return 	new Sigma.fixtures
+										.hal_builder(
+											collection.items.splice(id,1)[0]
+										,	original.url
+										).get_document()
+								}
+							,	put
+							=	function(original)
+								{
+								var 	id 
+								= 	original.url.split('/').pop()
+								,	data_updated
+								=	can.extend({id:collection.items[id].id}, {desc: original.data.desc})
+									collection.items.splice(id,1,data_updated)
+								return 	new Sigma.fixtures
+										.hal_builder(
+											data_updated
+										,	original.url
+										).get_document()
+								}
+							,	post
+							=	function(original)
+								{
+								var	parsed
+								=	parseUri(original.url)
+								,	name
+								=	uritemplate(parsed.path.split('/').pop()+'{/id}')
+								,	url
+								=	name.expand({id: collection.items.length})
+									collection.items.push(original.data)
+									can.fixture("PUT "+url,put)
+									can.fixture("DELETE "+url,del)
+								return 	new Sigma.fixtures
+										.hal_builder(
+											original.data
+										,	url
+										).get_document()
+								}
+								can.fixture("POST /"+collection.name ,	post)
+								can.fixture("PUT /"+collection.name + "/{id}" ,	put)
+								can.fixture("DELETE /"+collection.name + "/{id}" ,	del)
 								can.fixture("GET /"+collection.name ,	generator)
 								can.fixture("GET /"+collection.name+"?page={p}" ,	generator)
 								can.fixture("GET /"+collection.name+"?page={p}&items-per-page={ipp}" ,	generator)
@@ -69,7 +114,9 @@ steal(
 			,	getPage:
 					function(collection,options)
 					{
-					var	current_page
+					var	url
+					=	uritemplate(options.collectionUrl+'{/id}{?page,items-per-page}')
+					,	current_page
 					=	options.currentPage||1
 					,	items_per_page
 					=	options.itemsPerPage||20
@@ -77,8 +124,6 @@ steal(
 					=	(current_page-1)*items_per_page
 					,	end
 					=	start+items_per_page
-					,	url
-					=	uritemplate(options.collectionUrl+'{/id}{?page,items-per-page}')
 					,	last_page
 					=	(collection.items.length+items_per_page-1)/items_per_page
 					,	self
@@ -118,6 +163,7 @@ steal(
 							}
 						).get_document()
 					}
+
 			}
 		,	{}
 		)

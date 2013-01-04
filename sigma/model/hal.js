@@ -91,7 +91,7 @@ steal(	'sigma/model'
 					return	this.parent.get(this.rel,name)
 					}
 			,	fetch:
-					function(name)
+					function(rel,name)
 					{
 					return	this.parent.fetch(this.rel,name)
 					}
@@ -217,15 +217,14 @@ steal(	'sigma/model'
 			,	Linked:
 					function(relation,name)
 					{
-					var	link=Sigma.Model.HAL.lookup(this.links,relation,name)
-					,	cached= this.links.get(relation,name)
-					,	model=	(Sigma.Model.HAL.model_by_rel(relation)||Sigma.Model.HAL.Resource)
+					var	cached= this.links.get(relation,name)
 					return	(cached)
 							?can.Deferred().resolve(cached)
-							:link
-								?model.Fetch(link.url())
+							:Sigma.Model.HAL.lookup(this.links,relation,name)
+								?(Sigma.Model.HAL.model_by_rel(relation)||Sigma.Model.HAL.Resource)
+								.Fetch(Sigma.Model.HAL.lookup(this.links,relation,name).url())
 								:can.Deferred.reject(
-										'invalid relation: "' + relation + '"'
+									'invalid relation: "' + relation + '"'
 								)
 					}
 			,	Fetch:
@@ -239,10 +238,11 @@ steal(	'sigma/model'
 						).pipe(
 							function(raw)
 							{
-								return	self.constructor.model(raw)
+							return	self.constructor.model(raw)
 							}
 						)
 					}
+			
 			}
 		);
 		Sigma.Model.HAL.Resource.List( 'Sigma.Model.HAL.Resource.List',{},{})

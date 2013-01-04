@@ -190,47 +190,125 @@ steal(
 			}
 		)
 		test(
-			"Collection CRUD"
+			"Collection CRUD static"
 		,	function()
 			{
 				can.fixture('GET /provincias',steal.idToUri("//stock/fixtures/data/json/provincias.json").path)
 				stop()
 				Sigma.fixtures.collection.scrollable.getCollectionsFixturator(
 					Sigma.fixtures.collection.getCollection("/provincias")
-					.pipe(
-						function(collection)
-						{
-							console.log(collection)
-							collection.items=collection.items.slice(1,6)
-						return	collection
-						}
-					)
 				).then(
 					function(collection)
 					{
-						var coll = Sigma.Model.HAL.Collection.getRoot("/provincias")
-						coll.then(function(obj){
-							
-							console.log(obj)
-							console.log(obj.getCollection())
-							ok(obj)
-							equals(obj.embedded.collection.constructor.fullName,"Sigma.Model.HAL.Collection.List","Collection Fullname type ok")
-							equals(obj.embedded.attr('collection.0').constructor.fullName,"Sigma.Model.HAL.Collection","Collection element Fullname type ok")
-							equals(obj.embedded.collection.length,5,"Collection length ok")
-							obj.post({id: "ANT", desc: "Antartida"})
-							equals(obj.embedded.collection.length,6,"Collection length ok")
-							equals(obj.embedded.attr('collection.5').constructor.fullName,"Sigma.Model.HAL.Collection","Collection new element Fullname type ok")
-							equals(obj.embedded.attr('collection.5').desc,"Antartida","Data true")
-							obj.put("ANT",{desc: "German Ladri"})
-							equals(obj.embedded.attr('collection.5').desc,"German Ladri","Data desc update true")
-							obj.del("ANT")
-							equals(obj.embedded.collection.length,5,"Collection length ok")
-							equals(obj.embedded.attr('collection.5'),undefined,"Data remove from collection true")
-							start()
-						})
+						can.when(Sigma.Model.HAL.Collection.getRoot('/provincias'))
+						.then(
+							function(provs)
+							{
+								ok(provs,'GET data collection ok')
+								equals(provs.embedded.collection.constructor.fullName,"Sigma.Model.HAL.Collection.List","GET: Collection Fullname type ok")
+								equals(provs.embedded.collection.length,24,"GET: Collection length ok")
+								start()
+							}
+						)
+						stop()
+						can.when(Sigma.Model.HAL.Collection.Post('/provincias',{id: "ANT", desc: "Antartida"}))
+						.then(
+							function(new_data)
+							{
+								equals(new_data.constructor.fullName,"Sigma.Model.HAL.Collection","POST: Collection element Fullname type ok")
+								equals(new_data.id,"ANT","POST: Data result - attribute id - is OK ")
+								equals(new_data.desc,"Antartida", "POST: Data result - attribute desc - is OK")
+								start()
+							}
+						)
+						stop()
+						can.when(Sigma.Model.HAL.Collection.Put('/provincias/24',{desc: "German Ladri"}))
+						.then(
+							function(updated_obj)
+							{
+								equals(updated_obj.constructor.fullName,"Sigma.Model.HAL.Collection","PUT: Collection element Fullname type ok")
+								equals(updated_obj.desc,"German Ladri","PUT: Data desc update true")
+								equals(updated_obj.id,"ANT","PUT: Data id update true")
+								start()
+							}
+						)
+						stop()
+						can.when(Sigma.Model.HAL.Collection.Delete('/provincias/24'))
+						.then(
+							function(remove_obj)
+							{
+								equals(remove_obj.constructor.fullName,"Sigma.Model.HAL.Collection","DELETE: Collection element Fullname type ok")
+								equals(remove_obj.id,"ANT","DELETE: Data desc update true")
+								start()
+							}
+						)
+						stop()
+						can.when(Sigma.Model.HAL.Collection.getRoot('/provincias'))
+						.then(
+							function(obj)
+							{
+								equals(obj.embedded.collection.length,24,"DELETE: Collection length ok")
+								equals(obj.embedded.attr('collection.24'),undefined,"DELETE: Data remove from collection true")
+								start()
+							}
+						)
+						
 					}
 				)
 			}
 		)
+		test(
+			"Collection CRUD instance"
+		,	function()
+			{
+				can.fixture('GET /provincias',steal.idToUri("//stock/fixtures/data/json/provincias.json").path)
+				stop()
+				Sigma.fixtures.collection.scrollable.getCollectionsFixturator(
+					Sigma.fixtures.collection.getCollection("/provincias")
+				).then(
+					function(collection)
+					{
+						can.when(Sigma.Model.HAL.Collection.getRoot("/provincias"))
+						.then(
+							function(obj)
+							{
+								ok(obj,"GET data collection ok")
+								equals(obj.embedded.collection.constructor.fullName,"Sigma.Model.HAL.Collection.List","Collection Fullname type ok")
+								equals(obj.embedded.attr('collection.0').constructor.fullName,"Sigma.Model.HAL.Collection","Collection element Fullname type ok")
+								equals(obj.embedded.collection.length,24,"Collection length ok")
+								can.when(obj.post({id: "ANT", desc: "Antartida"}))
+								.then(
+									function()
+									{
+										equals(obj.embedded.attr('collection').length,25,"Collection length ok")
+										equals(obj.embedded.attr('collection.24').constructor.fullName,"Sigma.Model.HAL.Collection","Collection new element Fullname type ok")
+										equals(obj.embedded.attr('collection.24').desc,"Antartida","Data true")
+										can.when(obj.embedded.attr('collection.24').put({desc: "German Ladri"}))
+										.then(
+											function(objs)
+											{
+												equals(obj.embedded.attr('collection.24').desc,"German Ladri","Data desc update true")
+												start()
+												stop()
+												can.when(obj.embedded.attr('collection.24').delete())
+												.then(
+													function()
+													{
+														equals(obj.embedded.collection.length,24,"Collection length ok")
+														equals(obj.embedded.attr('collection.24'),undefined,"Data remove from collection true")
+														start()
+													}
+												)
+											}
+										)
+									}
+								)
+							}
+						)
+					}
+				)
+			}
+		)
+
 	}
 )
